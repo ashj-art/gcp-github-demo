@@ -1,4 +1,5 @@
 name: Build and Push Python Image to Google Cloud Platform
+
 on:
   push:
     branches: [ main ]
@@ -10,6 +11,9 @@ jobs:
     env:
       IMAGE_NAME: gcp-demo-image
       PROJECT_ID: burner-ashj-01
+      REPO_NAME: gcpdemorepo
+      REGION: us-central1
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -24,17 +28,14 @@ jobs:
         run: docker build -t $IMAGE_NAME:latest .
 
       - name: Configure Docker Client
-        run: |
-          gcloud auth configure-docker  --quiet
-          gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
-      
+        run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
+
       - name: Push Docker Image to Artifact Registry
         env:
           GIT_TAG: v0.1.0
         run: |-
-          docker tag $IMAGE_NAME:latest us-central1-docker.pkg.dev/$PROJECT_ID/images/$IMAGE_NAME:latest
-          docker tag $IMAGE_NAME:latest us-central1-docker.pkg.dev/$PROJECT_ID/images/$IMAGE_NAME:$GIT_TAG
-          docker push us-central1-docker.pkg.dev/$PROJECT_ID/images/$IMAGE_NAME:latest
-          docker push us-central1-docker.pkg.dev/$PROJECT_ID/images/$IMAGE_NAME:$GIT_TAG
+          docker tag $IMAGE_NAME:latest $REGION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/$IMAGE_NAME:latest
+          docker tag $IMAGE_NAME:latest $REGION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/$IMAGE_NAME:$GIT_TAG
 
-
+          docker push $REGION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/$IMAGE_NAME:latest
+          docker push $REGION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/$IMAGE_NAME:$GIT_TAG
