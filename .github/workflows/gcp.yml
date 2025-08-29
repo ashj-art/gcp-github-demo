@@ -37,14 +37,14 @@ jobs:
         run: 'gcloud components install beta'
 
       - name: Configure Docker Client
-        run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
+        run: gcloud auth configure-docker ${{ env.REGION }}-us-central1-docker.pkg.dev/burner-ashj-01/gcpdemorepo --quiet
 
       - name: Push Docker Image to Artifact Registry
         env:
           GIT_TAG: v0.1.0
         run: |-
-          docker tag $IMAGE_NAME:latest $REGION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/$IMAGE_NAME:latest
-          docker tag $IMAGE_NAME:latest $REGION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/$IMAGE_NAME:$GIT_TAG
+          docker tag us-central1-docker.pkg.dev/burner-ashj-01/gcpdemorepo:latest
+          docker tag us-central1-docker.pkg.dev/burner-ashj-01/gcpdemorepo:$GIT_TAG
 
-          docker push $REGION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/$IMAGE_NAME:latest
-          docker push $REGION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/$IMAGE_NAME:$GIT_TAG
+          docker push us-central1-docker.pkg.dev/burner-ashj-01/gcpdemorepo:latest
+          docker push us-central1-docker.pkg.dev/burner-ashj-01/gcpdemorepo:$GIT_TAG
