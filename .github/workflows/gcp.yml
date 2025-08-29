@@ -40,11 +40,11 @@ jobs:
         run: gcloud auth configure-docker ${{ env.REGION }}-us-central1-docker.pkg.dev/burner-ashj-01/gcpdemorepo --quiet
 
       - name: Push Docker Image to Artifact Registry
-        env:
-          GIT_TAG: v0.1.0
+        
+    
         run: |-
           docker tag us-central1-docker.pkg.dev/burner-ashj-01/gcpdemorepo:latest
-          docker tag us-central1-docker.pkg.dev/burner-ashj-01/gcpdemorepo:$GIT_TAG
-
+          gcloud auth configure-docker
+        
           docker push us-central1-docker.pkg.dev/burner-ashj-01/gcpdemorepo:latest
-          docker push us-central1-docker.pkg.dev/burner-ashj-01/gcpdemorepo:$GIT_TAG
+          
