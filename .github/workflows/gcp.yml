@@ -17,6 +17,7 @@ jobs:
         uses: 'google-github-actions/auth@v2'
         with:
           credentials_json: ${{ secrets.SERVICE_ACCOUNT_KEY }}
+
       - name: Set up Cloud SDK
         uses: 'google-github-actions/setup-gcloud@v2'
         with:
@@ -28,21 +29,21 @@ jobs:
  
       - name: Authenticate Docker with gcloud
         run: |
-          gcloud auth configure-docker us-docker.pkg.dev --quiet
+          gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
  
       - name: Build Docker image
         run: |
-          docker build -t us-docker.pkg.dev/zippy-rarity-468010-a3/cloudrun/dev:latest .
+          docker build -t us-central1-docker.pkg.dev/burner-ashj-01/cloudrun/dev:latest .
  
       - name: Push Docker image
         run: |
-          docker push us-docker.pkg.dev/zippy-rarity-468010-a3/cloudrun/dev:latest
+          docker push us-central1-docker.pkg.dev/burner-ashj-01/cloudrun/dev:latest
  
       - name: Deploy to Cloud Run
         run: |
           gcloud run deploy application \
-            --image us-docker.pkg.dev/zippy-rarity-468010-a3/cloudrun/dev:latest \
+            --image us-central1-docker.pkg.dev/burner-ashj-01/cloudrun/dev:latest \
             --region us-central1 \
             --platform managed \
             --allow-unauthenticated \
-            --project zippy-rarity-468010-a3
+            --project burner-ashj-01
